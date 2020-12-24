@@ -1,23 +1,30 @@
+// Importing all packages
 const { render } = require("ejs");
 const User = require("../models/user.model");
 const router = require("express").Router()
 const { body, validationResult} = require('express-validator')
+const passport = require('passport')
+const connectEnsure = require('connect-ensure-login')
 
 
 //get route for login page
-router.get("/login", async (req, res, next) => {
+router.get("/login", connectEnsure.ensureLoggedOut({redirectTo: '/'}), async (req, res, next) => {
     //res.send("Login");
     res.render('login');
 });
 
 //post route for login page 
-router.post("/login", async (req, res, next) => {
-    res.send("Login post");
-});
+router.post("/login", connectEnsure.ensureLoggedOut({redirectTo: '/user/profile'}), passport.authenticate('local', {
+    //successRedirect: "/",
+    successReturnToOrRedirect: '/',
+    //successReturnToOrRedirect: '/',
+    failureRedirect: "/auth/login",
+    failureFlash: true
+}));
 
 
 //get route for register page 
-router.get("/register", async (req, res, next) => {
+router.get("/register", connectEnsure.ensureLoggedOut({redirectTo: '/'}), async (req, res, next) => {
     //res.send("Register");
     //req.flash('Email already exists', 'error');
     //const messages = req.flash();
@@ -25,7 +32,8 @@ router.get("/register", async (req, res, next) => {
 });
 
 //post route for register page
-router.post("/register", [
+router.post("/register", connectEnsure.ensureLoggedOut({redirectTo: '/'}),
+ [
     body('email')
     .trim()
     .isEmail()
@@ -74,7 +82,24 @@ router.post("/register", [
 });
 
 
-router.get("/logout", async (req, res, next) => {
-    res.send("Logout");
+router.get("/logout", connectEnsure.ensureLoggedIn({redirectTo: '/'}), async (req, res, next) => {
+    req.logout();//comes from passport package
+    res.redirect('/');//after successfully logout redirect to homepage 
 })
-module.exports = router
+module.exports = router;
+
+/*function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.redirect('/auth/login');
+    }
+}
+
+function ensureNOTAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        res.redirect('back');
+    } else {
+        next();
+    }
+}*/

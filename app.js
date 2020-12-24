@@ -6,6 +6,9 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 const session = require('express-session')
 const conncetFlash = require('connect-flash')
+const passport = require('passport')
+const connectMongo = require('connect-mongo')
+const connectEnsureLogin = require('connect-ensure-login')
 
 
 //initialization
@@ -16,6 +19,8 @@ app.use(express.static('public'));
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
+// Session store
+const MongoStore = connectMongo(session)
 //Init session
 app.use(
     session({
@@ -25,10 +30,23 @@ app.use(
         cookie: {
             //secure: true //use only when it is https server
             httpOnly: true
-        }
+        },
+        store: new MongoStore({mongooseConnection: mongoose.connection}),
     })
-)
+);
+// For passport js authentication 
+app.use(passport.initialize());
+app.use(passport.session());
+require('./utils/passport.auth');
 
+
+app.use((req ,res, next) => {
+    res.locals.user = req.user;
+    next();
+})
+
+
+// Connect flash
 app.use(conncetFlash());
 app.use((req, res, next) => {
     res.locals.messages = req.flash();
@@ -39,7 +57,7 @@ app.use((req, res, next) => {
 //Routes
 app.use("/", require("./routes/index.route"));
 app.use("/auth", require("./routes/auth.route"));
-app.use("/user", require("./routes/user.route"));
+app.use("/user", connectEnsureLogin.ensureLoggedIn({redirectTo: '/auth/login'}), require("./routes/user.route"));
 app.use((req, res, next) => {
     next(createHttpError.NotFound())
 });
@@ -68,3 +86,12 @@ mongoose.connect(process.env.MONGO_URI, {
     app.listen(PORT, () => console.log(`server started on port ${PORT}`))
     console.log("Database connected...")
 }).catch(err => console.log(err.message));
+
+// protect routes
+/*function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.redirect('/auth/login');
+    }
+}*/

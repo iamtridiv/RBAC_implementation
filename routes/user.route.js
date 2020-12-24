@@ -1,9 +1,16 @@
-const { render } = require("ejs");
-const User = require("../models/user.model");
-const router = require("express").Router()
+const { render } = require('ejs')
+const router = require('express').Router();
+
+/*router.get('/profile', async (req, res, next) => {
+  // console.log(req.user);
+  const person = req.user;
+  res.render('profile');
+});*/
 
 router.get("/profile", async (req, res, next) => {
-    res.render('profile');
-})
+    //res.send("Login");
+    const person = req.user
+    res.render('profile', {person});
+});
 
-module.exports = router
+module.exports = router;
