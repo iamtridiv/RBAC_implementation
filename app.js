@@ -61,6 +61,7 @@ app.use("/user", connectEnsureLogin.ensureLoggedIn({redirectTo: '/auth/login'}),
 app.use((req, res, next) => {
     next(createHttpError.NotFound())
 });
+app.use("/admin", connectEnsureLogin.ensureLoggedIn({redirectTo: '/auth/login'}), require("./routes/admin.routes"));
 
 //error handling 
 app.use((error, req, res, next) => {
