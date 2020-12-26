@@ -184,8 +184,8 @@ tbody tr td:first-child {
 }
 
 .profile {
-  min-width: 600px;
-  padding: 16px;
+  min-width: 500px;
+  padding: 10px;
   border: 4px solid #d1d5db;
   border-radius: 16px;
   margin-top: 32px;
