@@ -2,6 +2,7 @@ const User = require('../models/user.model');
 const router = require("express").Router();
 const mongoose = require('mongoose');
 const { roles } = require('../utils/constants');
+const { findByIdAndRemove } = require('../models/user.model');
 
 
 
@@ -66,7 +67,21 @@ router.post('/update-role', async (req, res, next) => {
     //update flash message 
     req.flash('info', `updated role for ${user.email} to ${user.role}`)
     res.redirect('back');
+    
 })
+//Delete a user 
+router.post('/delete-role', async (req, res) => {
+    const {id, role} = req.body;
+
+    //finally delete the users
+    const user = await User.findByIdAndRemove(req.params.id).exec();
+
+    //update flash message 
+    req.flash('info', `Deletd role for ${user.email}`)
+    res.redirect('back');
+})
+
+
 
 
 module.exports = router;

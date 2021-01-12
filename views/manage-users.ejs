@@ -24,6 +24,15 @@
             <option value="CLIENT" <%= user.role === 'CLIENT' ? 'selected' : '' %>>Client</option>
           </select>
           <input type="submit" value="update">
+          
+          <form
+          action="/admin/delete-role"
+          method="post"
+          class="manage-user-form"
+        >
+          <input type="hidden" name="id" value="<%= user.id %>" />
+          <input type="submit" value="delete">
+
         </form>
       </td>
     </tr>
