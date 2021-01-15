@@ -86,7 +86,7 @@ form.lg-form {
 
 .lg-form input[type='submit'] {
   margin: 16px 0;
-  background-color: #db2777;
+  background-color: black;
   color: #fff;
   cursor: pointer;
 }
@@ -120,7 +120,7 @@ thead {
 
 thead tr {
   border-radius: 8px;
-  background-color: #db2777;
+  background-color: black;
   overflow: hidden;
 }
 
@@ -153,7 +153,7 @@ tbody tr td {
 
 .manage-user-form input[type='submit'] {
   background: transparent;
-  color: #db2777;
+  color: black;
   border: none;
   outline: none;
   padding: 8px 16px;

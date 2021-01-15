@@ -69,19 +69,6 @@ router.post('/update-role', async (req, res, next) => {
     res.redirect('back');
     
 })
-//Delete a user 
-router.post('/delete-role', async (req, res) => {
-    const {id, role} = req.body;
-
-    //finally delete the users
-    const user = await User.findByIdAndRemove(req.params.id).exec();
-
-    //update flash message 
-    req.flash('info', `Deletd role for ${user.email}`)
-    res.redirect('back');
-})
-
-
 
 
 module.exports = router;

@@ -1,7 +1,7 @@
 <%- include ('layouts/header') %>
 <h1 class="table">Manage Users</h1>
 
-<table class="table">
+<table class="table" style="color: black">
   <thead>
     <th>id</th>
     <th>email</th>
@@ -24,14 +24,6 @@
             <option value="CLIENT" <%= user.role === 'CLIENT' ? 'selected' : '' %>>Client</option>
           </select>
           <input type="submit" value="update">
-          
-          <form
-          action="/admin/delete-role"
-          method="post"
-          class="manage-user-form"
-        >
-          <input type="hidden" name="id" value="<%= user.id %>" />
-          <input type="submit" value="delete">
 
         </form>
       </td>
